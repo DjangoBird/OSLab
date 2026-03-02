@@ -1,0 +1,266 @@
+
+build/auipc:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000052020000 <_start>:
+    52020000:	838a                	mv	t2,sp
+    52020002:	00000297          	auipc	t0,0x0
+    52020006:	3d228293          	addi	t0,t0,978 # 520203d4 <__DATA_BEGIN__>
+    5202000a:	00000317          	auipc	t1,0x0
+    5202000e:	3ce30313          	addi	t1,t1,974 # 520203d8 <__BSS_END__>
+
+0000000052020012 <clear_bss>:
+    52020012:	0062d663          	bge	t0,t1,5202001e <bss_done>
+    52020016:	0002a023          	sw	zero,0(t0)
+    5202001a:	0291                	addi	t0,t0,4
+    5202001c:	bfdd                	j	52020012 <clear_bss>
+
+000000005202001e <bss_done>:
+    5202001e:	53000137          	lui	sp,0x53000
+    52020022:	1141                	addi	sp,sp,-16 # 52fffff0 <__BSS_END__+0xfdfc18>
+    52020024:	e006                	sd	ra,0(sp)
+    52020026:	e41e                	sd	t2,8(sp)
+    52020028:	012000ef          	jal	5202003a <main>
+    5202002c:	6082                	ld	ra,0(sp)
+    5202002e:	63a2                	ld	t2,8(sp)
+    52020030:	811e                	mv	sp,t2
+    52020032:	9082                	jalr	ra
+
+0000000052020034 <loop>:
+    52020034:	10500073          	wfi
+    52020038:	bff5                	j	52020034 <loop>
+
+000000005202003a <main>:
+    5202003a:	1141                	addi	sp,sp,-16
+    5202003c:	e406                	sd	ra,8(sp)
+    5202003e:	4501                	li	a0,0
+    52020040:	00000517          	auipc	a0,0x0
+    52020044:	22c000ef          	jal	52020270 <print_pc>
+    52020048:	60a2                	ld	ra,8(sp)
+    5202004a:	4501                	li	a0,0
+    5202004c:	0141                	addi	sp,sp,16
+    5202004e:	8082                	ret
+
+0000000052020050 <simple_itoa.part.0>:
+    52020050:	0c055363          	bgez	a0,52020116 <simple_itoa.part.0+0xc6>
+    52020054:	e2e9                	bnez	a3,52020116 <simple_itoa.part.0+0xc6>
+    52020056:	40a00533          	neg	a0,a0
+    5202005a:	4305                	li	t1,1
+    5202005c:	06100893          	li	a7,97
+    52020060:	c219                	beqz	a2,52020066 <simple_itoa.part.0+0x16>
+    52020062:	04100893          	li	a7,65
+    52020066:	1582                	slli	a1,a1,0x20
+    52020068:	9181                	srli	a1,a1,0x20
+    5202006a:	38d9                	addiw	a7,a7,-10
+    5202006c:	863a                	mv	a2,a4
+    5202006e:	4825                	li	a6,9
+    52020070:	a811                	j	52020084 <simple_itoa.part.0+0x34>
+    52020072:	02b54533          	div	a0,a0,a1
+    52020076:	0306869b          	addiw	a3,a3,48
+    5202007a:	00d60023          	sb	a3,0(a2)
+    5202007e:	0605                	addi	a2,a2,1
+    52020080:	00a05f63          	blez	a0,5202009e <simple_itoa.part.0+0x4e>
+    52020084:	02b566b3          	rem	a3,a0,a1
+    52020088:	fed855e3          	bge	a6,a3,52020072 <simple_itoa.part.0+0x22>
+    5202008c:	02b54533          	div	a0,a0,a1
+    52020090:	00d886bb          	addw	a3,a7,a3
+    52020094:	00d60023          	sb	a3,0(a2)
+    52020098:	0605                	addi	a2,a2,1
+    5202009a:	fea045e3          	bgtz	a0,52020084 <simple_itoa.part.0+0x34>
+    5202009e:	40e606bb          	subw	a3,a2,a4
+    520200a2:	02f6f463          	bgeu	a3,a5,520200ca <simple_itoa.part.0+0x7a>
+    520200a6:	fff7859b          	addiw	a1,a5,-1
+    520200aa:	9d95                	subw	a1,a1,a3
+    520200ac:	1582                	slli	a1,a1,0x20
+    520200ae:	9181                	srli	a1,a1,0x20
+    520200b0:	00158693          	addi	a3,a1,1
+    520200b4:	87b2                	mv	a5,a2
+    520200b6:	03000513          	li	a0,48
+    520200ba:	96b2                	add	a3,a3,a2
+    520200bc:	0785                	addi	a5,a5,1
+    520200be:	fea78fa3          	sb	a0,-1(a5)
+    520200c2:	fed79de3          	bne	a5,a3,520200bc <simple_itoa.part.0+0x6c>
+    520200c6:	0605                	addi	a2,a2,1
+    520200c8:	962e                	add	a2,a2,a1
+    520200ca:	00030763          	beqz	t1,520200d8 <simple_itoa.part.0+0x88>
+    520200ce:	02d00793          	li	a5,45
+    520200d2:	00f60023          	sb	a5,0(a2)
+    520200d6:	0605                	addi	a2,a2,1
+    520200d8:	40e6053b          	subw	a0,a2,a4
+    520200dc:	00060023          	sb	zero,0(a2)
+    520200e0:	0015589b          	srliw	a7,a0,0x1
+    520200e4:	02088863          	beqz	a7,52020114 <simple_itoa.part.0+0xc4>
+    520200e8:	fff7081b          	addiw	a6,a4,-1
+    520200ec:	98ba                	add	a7,a7,a4
+    520200ee:	00a8083b          	addw	a6,a6,a0
+    520200f2:	86ba                	mv	a3,a4
+    520200f4:	40d807bb          	subw	a5,a6,a3
+    520200f8:	1782                	slli	a5,a5,0x20
+    520200fa:	9381                	srli	a5,a5,0x20
+    520200fc:	97ba                	add	a5,a5,a4
+    520200fe:	0007c583          	lbu	a1,0(a5)
+    52020102:	0006c603          	lbu	a2,0(a3)
+    52020106:	0685                	addi	a3,a3,1
+    52020108:	feb68fa3          	sb	a1,-1(a3)
+    5202010c:	00c78023          	sb	a2,0(a5)
+    52020110:	ff1692e3          	bne	a3,a7,520200f4 <simple_itoa.part.0+0xa4>
+    52020114:	8082                	ret
+    52020116:	4301                	li	t1,0
+    52020118:	b791                	j	5202005c <simple_itoa.part.0+0xc>
+
+000000005202011a <my_itoa>:
+    5202011a:	0c055263          	bgez	a0,520201de <my_itoa+0xc4>
+    5202011e:	e2e1                	bnez	a3,520201de <my_itoa+0xc4>
+    52020120:	40a00533          	neg	a0,a0
+    52020124:	4305                	li	t1,1
+    52020126:	06100893          	li	a7,97
+    5202012a:	c219                	beqz	a2,52020130 <my_itoa+0x16>
+    5202012c:	04100893          	li	a7,65
+    52020130:	1582                	slli	a1,a1,0x20
+    52020132:	9181                	srli	a1,a1,0x20
+    52020134:	38d9                	addiw	a7,a7,-10
+    52020136:	863a                	mv	a2,a4
+    52020138:	4825                	li	a6,9
+    5202013a:	a819                	j	52020150 <my_itoa+0x36>
+    5202013c:	0306869b          	addiw	a3,a3,48
+    52020140:	00d60023          	sb	a3,0(a2)
+    52020144:	0605                	addi	a2,a2,1
+    52020146:	02b556b3          	divu	a3,a0,a1
+    5202014a:	02b56063          	bltu	a0,a1,5202016a <my_itoa+0x50>
+    5202014e:	8536                	mv	a0,a3
+    52020150:	02b576b3          	remu	a3,a0,a1
+    52020154:	fed874e3          	bgeu	a6,a3,5202013c <my_itoa+0x22>
+    52020158:	00d886bb          	addw	a3,a7,a3
+    5202015c:	00d60023          	sb	a3,0(a2)
+    52020160:	0605                	addi	a2,a2,1
+    52020162:	02b556b3          	divu	a3,a0,a1
+    52020166:	feb574e3          	bgeu	a0,a1,5202014e <my_itoa+0x34>
+    5202016a:	40e606bb          	subw	a3,a2,a4
+    5202016e:	02f6f463          	bgeu	a3,a5,52020196 <my_itoa+0x7c>
+    52020172:	fff7859b          	addiw	a1,a5,-1
+    52020176:	9d95                	subw	a1,a1,a3
+    52020178:	1582                	slli	a1,a1,0x20
+    5202017a:	9181                	srli	a1,a1,0x20
+    5202017c:	00158693          	addi	a3,a1,1
+    52020180:	87b2                	mv	a5,a2
+    52020182:	03000513          	li	a0,48
+    52020186:	96b2                	add	a3,a3,a2
+    52020188:	0785                	addi	a5,a5,1
+    5202018a:	fea78fa3          	sb	a0,-1(a5)
+    5202018e:	fed79de3          	bne	a5,a3,52020188 <my_itoa+0x6e>
+    52020192:	0605                	addi	a2,a2,1
+    52020194:	962e                	add	a2,a2,a1
+    52020196:	00030763          	beqz	t1,520201a4 <my_itoa+0x8a>
+    5202019a:	02d00793          	li	a5,45
+    5202019e:	00f60023          	sb	a5,0(a2)
+    520201a2:	0605                	addi	a2,a2,1
+    520201a4:	40e6053b          	subw	a0,a2,a4
+    520201a8:	00060023          	sb	zero,0(a2)
+    520201ac:	fff5081b          	addiw	a6,a0,-1 # 5202003f <main+0x5>
+    520201b0:	03005663          	blez	a6,520201dc <my_itoa+0xc2>
+    520201b4:	02081793          	slli	a5,a6,0x20
+    520201b8:	9381                	srli	a5,a5,0x20
+    520201ba:	4681                	li	a3,0
+    520201bc:	97ba                	add	a5,a5,a4
+    520201be:	0007c583          	lbu	a1,0(a5)
+    520201c2:	00074603          	lbu	a2,0(a4)
+    520201c6:	2685                	addiw	a3,a3,1
+    520201c8:	00b70023          	sb	a1,0(a4)
+    520201cc:	00c78023          	sb	a2,0(a5)
+    520201d0:	40d8063b          	subw	a2,a6,a3
+    520201d4:	0705                	addi	a4,a4,1
+    520201d6:	17fd                	addi	a5,a5,-1
+    520201d8:	fec6c3e3          	blt	a3,a2,520201be <my_itoa+0xa4>
+    520201dc:	8082                	ret
+    520201de:	4301                	li	t1,0
+    520201e0:	b799                	j	52020126 <my_itoa+0xc>
+
+00000000520201e2 <my_atoi>:
+    520201e2:	00054783          	lbu	a5,0(a0)
+    520201e6:	02000713          	li	a4,32
+    520201ea:	00e79763          	bne	a5,a4,520201f8 <my_atoi+0x16>
+    520201ee:	00154783          	lbu	a5,1(a0)
+    520201f2:	0505                	addi	a0,a0,1
+    520201f4:	fee78de3          	beq	a5,a4,520201ee <my_atoi+0xc>
+    520201f8:	02d00713          	li	a4,45
+    520201fc:	06e78163          	beq	a5,a4,5202025e <my_atoi+0x7c>
+    52020200:	02b00713          	li	a4,43
+    52020204:	4805                	li	a6,1
+    52020206:	02e78f63          	beq	a5,a4,52020244 <my_atoi+0x62>
+    5202020a:	00054603          	lbu	a2,0(a0)
+    5202020e:	45a5                	li	a1,9
+    52020210:	4701                	li	a4,0
+    52020212:	fd06069b          	addiw	a3,a2,-48
+    52020216:	0ff6f793          	zext.b	a5,a3
+    5202021a:	04f5e063          	bltu	a1,a5,5202025a <my_atoi+0x78>
+    5202021e:	0027179b          	slliw	a5,a4,0x2
+    52020222:	00154603          	lbu	a2,1(a0)
+    52020226:	9fb9                	addw	a5,a5,a4
+    52020228:	0017979b          	slliw	a5,a5,0x1
+    5202022c:	00f6873b          	addw	a4,a3,a5
+    52020230:	fd06069b          	addiw	a3,a2,-48
+    52020234:	0ff6f793          	zext.b	a5,a3
+    52020238:	0505                	addi	a0,a0,1
+    5202023a:	fef5f2e3          	bgeu	a1,a5,5202021e <my_atoi+0x3c>
+    5202023e:	0307053b          	mulw	a0,a4,a6
+    52020242:	8082                	ret
+    52020244:	9542                	add	a0,a0,a6
+    52020246:	00054603          	lbu	a2,0(a0)
+    5202024a:	45a5                	li	a1,9
+    5202024c:	4701                	li	a4,0
+    5202024e:	fd06069b          	addiw	a3,a2,-48
+    52020252:	0ff6f793          	zext.b	a5,a3
+    52020256:	fcf5f4e3          	bgeu	a1,a5,5202021e <my_atoi+0x3c>
+    5202025a:	4501                	li	a0,0
+    5202025c:	8082                	ret
+    5202025e:	0505                	addi	a0,a0,1
+    52020260:	587d                	li	a6,-1
+    52020262:	b765                	j	5202020a <my_atoi+0x28>
+
+0000000052020264 <simple_itoa>:
+    52020264:	4841                	li	a6,16
+    52020266:	00b86363          	bltu	a6,a1,5202026c <simple_itoa+0x8>
+    5202026a:	b3dd                	j	52020050 <simple_itoa.part.0>
+    5202026c:	4501                	li	a0,0
+    5202026e:	8082                	ret
+
+0000000052020270 <print_pc>:
+    52020270:	715d                	addi	sp,sp,-80
+    52020272:	0038                	addi	a4,sp,8
+    52020274:	4781                	li	a5,0
+    52020276:	4685                	li	a3,1
+    52020278:	4601                	li	a2,0
+    5202027a:	45c1                	li	a1,16
+    5202027c:	e486                	sd	ra,72(sp)
+    5202027e:	e0a2                	sd	s0,64(sp)
+    52020280:	dd1ff0ef          	jal	52020050 <simple_itoa.part.0>
+    52020284:	52000437          	lui	s0,0x52000
+    52020288:	f0043783          	ld	a5,-256(s0) # 51ffff00 <_start-0x20100>
+    5202028c:	4701                	li	a4,0
+    5202028e:	4681                	li	a3,0
+    52020290:	4601                	li	a2,0
+    52020292:	4581                	li	a1,0
+    52020294:	00000517          	auipc	a0,0x0
+    52020298:	03c50513          	addi	a0,a0,60 # 520202d0 <print_pc+0x60>
+    5202029c:	9782                	jalr	a5
+    5202029e:	f0043783          	ld	a5,-256(s0)
+    520202a2:	0028                	addi	a0,sp,8
+    520202a4:	4701                	li	a4,0
+    520202a6:	4681                	li	a3,0
+    520202a8:	4601                	li	a2,0
+    520202aa:	4581                	li	a1,0
+    520202ac:	9782                	jalr	a5
+    520202ae:	f0043783          	ld	a5,-256(s0)
+    520202b2:	4701                	li	a4,0
+    520202b4:	4681                	li	a3,0
+    520202b6:	4601                	li	a2,0
+    520202b8:	4581                	li	a1,0
+    520202ba:	00000517          	auipc	a0,0x0
+    520202be:	03650513          	addi	a0,a0,54 # 520202f0 <print_pc+0x80>
+    520202c2:	9782                	jalr	a5
+    520202c4:	60a6                	ld	ra,72(sp)
+    520202c6:	6406                	ld	s0,64(sp)
+    520202c8:	6161                	addi	sp,sp,80
+    520202ca:	8082                	ret

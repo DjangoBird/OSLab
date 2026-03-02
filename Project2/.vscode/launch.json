@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type":"cppdbg",
+            "request": "launch",
+            "name": "Debug RISC-V Kernel (main)",
+            "program": "${workspaceFolder}/build/main",
+            "miDebuggerPath": "/opt/riscv64-linux/bin/riscv64-unknown-linux-gnu-gdb",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": true,
+            "miDebuggerServerAddress": "localhost:1234"
+        }
+    ]
+}
